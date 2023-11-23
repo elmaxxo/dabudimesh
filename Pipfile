@@ -1,0 +1,41 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+asyncio = "*"
+black = "*"
+pytest = "*"
+python-json-logger = "*"
+logging-json = "*"
+pytest-timeout = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
+
+[scripts]
+fmt = """bash -c "
+set -e -x
+pipenv run black ./dabudimesh
+"
+"""
+lint = """bash -c "
+set -e -x
+pipenv run flake8 ./dabudimesh
+pipenv run black ./dabudimesh --check --diff
+"
+"""
+lint-tests = """bash -c "
+set -e -x
+pipenv run flake8 ./tests
+pipenv run black ./tests --check --diff
+"
+"""
+fmt-tests = """bash -c "
+set -e -x
+pipenv run black ./tests
+"
+"""
