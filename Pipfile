@@ -10,6 +10,8 @@ pytest = "*"
 python-json-logger = "*"
 logging-json = "*"
 pytest-timeout = "*"
+pydbus = "*"
+pybluez = "*"
 
 [dev-packages]
 
