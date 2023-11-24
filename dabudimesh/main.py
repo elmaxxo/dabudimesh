@@ -3,7 +3,7 @@ from utils import create_server, create_connection, socket_address
 import asyncio
 import sys
 import bluetooth
-
+from config import IS_USING_BLUETOOTH
 
 IS_USING_BLUETOOTH = False
 

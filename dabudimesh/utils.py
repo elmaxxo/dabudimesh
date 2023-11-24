@@ -1,9 +1,7 @@
+from config import DEFAULT_BLUETOOTH_PORT
 import pydbus
 import random
 import socket
-
-
-DEFAULT_BLUETOOTH_PORT = 54321
 
 
 def getMAC():
@@ -13,16 +11,11 @@ def getMAC():
 
 
 def create_tcp_server():
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind(("localhost", random.randint(1000, 5000)))
-    s.listen()
-    return s
+    return socket.create_server(("localhost", random.randint(1025, 5000)))
 
 
 def create_tcp_connection(addr):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(("localhost", int(addr)))
-    return s
+    return socket.create_connection(("localhost", int(addr)))
 
 
 def create_bluetooth_server():
