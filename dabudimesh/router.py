@@ -1,3 +1,6 @@
+# from email import message
+from message import Message
+
 MSG_MAX_LEN = 4096
 
 
@@ -9,27 +12,57 @@ class Router:
 
     def add_connection(self, address, socket):
         # TODO: inform neighbors recursively
-        socket.sendall(bytes(self.address, "utf-8"))
         self.routing_table[address] = socket
+        self.send_connection(address, self.address)
 
-    def send(self, address, message):
-        # TODO: raise an error if not found
-        socket = self.routing_table[address]
-        socket.sendall(bytes(f"{address}:{message}", "utf-8"))
+    def send(self, message):
+        socket = self.routing_table[message.get_destination()]
+        socket.sendall(message.encode())
+
+    def send_message(self, destination, text):
+        message = Message("message", self.address, destination, {"text": text})
+        print(message)
+        self.send(message)
+
+    def send_connection(self, destination, address):
+        message = Message("connection", self.address, destination, {"address": address})
+        self.send(message)
 
     def process_message_from(self, socket):
-        message = socket.recv(MSG_MAX_LEN).decode()
-        [address, text] = message.split(":", maxsplit=1)
-        if address == self.address:
-            print(f"Read: {text}")
-            return text
+        parameters = Message.decode(socket.recv(MSG_MAX_LEN).decode("utf-8"))
+
+        optional = {}
+        additional_parameters = {"text", "address", "previous"}
+        for key in additional_parameters:
+            if key in parameters["params"]:
+                optional[key] = parameters["params"][key]
+
+        message = Message(
+            parameters["command"],
+            parameters["source"],
+            parameters["destination"],
+            optional,
+        )
+        if message.get_destination() == self.address:
+            if message.get_command() == "message":
+                return message.get_params()["text"]
+            elif message.get_command == "connection":
+                return message.get_params()["address"]
+            else:
+                return None
         else:
             # TODO: redirect if self.address != message.address
             None
 
+    def read_message_from(socket):
+        message = Message.decode(socket.recv(MSG_MAX_LEN).decode("utf-8"))
+        return message
+
     def accept(self):
         (socket, _) = self.listener.accept()
-        address = socket.recv(MSG_MAX_LEN).decode("utf-8")
+        address = Message.decode(socket.recv(MSG_MAX_LEN).decode("utf-8"))["params"][
+            "address"
+        ]
         print("New connection from ", address)
         self.routing_table[address] = socket
         return (socket, address)

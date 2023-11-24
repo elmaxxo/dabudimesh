@@ -4,9 +4,9 @@ from cmd import Cmd
 
 
 def _on_read(sock, router):
-    text = router.process_message_from(sock)
-    if text is not None:
-        print(text)
+    message = router.process_message_from(sock)
+    if message is not None:
+        print(message)
 
 
 class DabudiShell(Cmd):
@@ -42,7 +42,9 @@ class DabudiShell(Cmd):
         "message [addr] [msg] : Send message (msg) to node with address (addr)"
         args = self.__process(arg, 2)
         if args is not None:
-            self.router.send(args[0], args[1])
+            addr = args[0]
+            message = args[1]
+            self.router.send_message(addr, message)
 
     def do_scan(self, arg):
         "scan : Discover nearby bluetooth devices"
