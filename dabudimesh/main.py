@@ -1,11 +1,15 @@
 from router import Router
-from utils import create_server, create_connection, socket_address
+from utils import (
+    create_bluetooth_server,
+    create_tcp_server,
+    create_bluetooth_connection,
+    create_tcp_connection,
+    socket_address,
+)
 import asyncio
 import sys
 import bluetooth
 from config import IS_USING_BLUETOOTH
-
-IS_USING_BLUETOOTH = False
 
 EXIT_COMMAND = "\\exit"
 CONNECT_COMMAND = "\\connect"
@@ -24,7 +28,11 @@ def _on_command(sock, router):
     elif command.startswith(CONNECT_COMMAND):
         print("Got connect command")
         addr = command.split(" ")[1]
-        sock = create_connection(addr, IS_USING_BLUETOOTH)
+        sock = (
+            create_bluetooth_connection(addr)
+            if IS_USING_BLUETOOTH
+            else create_tcp_connection(addr)
+        )
         router.add_connection(addr, sock)
         asyncio.get_event_loop().add_reader(sock, _on_read, sock, router)
 
@@ -58,7 +66,7 @@ def _on_accept(router):
 
 
 def main():
-    listener = create_server(IS_USING_BLUETOOTH)
+    listener = create_bluetooth_server() if IS_USING_BLUETOOTH else create_tcp_server()
     address = socket_address(listener, IS_USING_BLUETOOTH)
     router = Router(address, listener)
     print("Our address is ", address)

@@ -11,7 +11,7 @@ def getMAC():
 
 
 def create_tcp_server():
-    return socket.create_server(("localhost", random.randint(1025, 5000)))
+    return socket.create_server(("localhost", random.randint(10000, 50000)))
 
 
 def create_tcp_connection(addr):
@@ -29,18 +29,6 @@ def create_bluetooth_connection(addr):
     s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
     s.connect((addr, DEFAULT_BLUETOOTH_PORT))
     return s
-
-
-def create_server(is_bluetooth=False):
-    return create_bluetooth_server() if is_bluetooth else create_tcp_server()
-
-
-def create_connection(addr, is_bluetooth=False):
-    return (
-        create_bluetooth_connection(addr)
-        if is_bluetooth
-        else create_tcp_connection(addr)
-    )
 
 
 def socket_address(sock, is_bluetooth=False):
