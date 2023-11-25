@@ -1,3 +1,6 @@
+MSG_MAX_LEN = 4096
+
+
 class Router:
     def __init__(self, address, listener):
         self.listener = listener
@@ -6,6 +9,7 @@ class Router:
 
     def add_connection(self, address, socket):
         # TODO: inform neighbors recursively
+        socket.sendall(bytes(self.address, "utf-8"))
         self.routing_table[address] = socket
 
     def send(self, address, message):
@@ -13,10 +17,10 @@ class Router:
         socket = self.routing_table[address]
         socket.sendall(bytes(f"{address}:{message}", "utf-8"))
 
-    def process_message_from(self, sock):
-        message = sock.recv(4096).decode()
+    def process_message_from(self, socket):
+        message = socket.recv(MSG_MAX_LEN).decode()
         [address, text] = message.split(":", maxsplit=1)
-        if int(address) == self.address:
+        if address == self.address:
             print(f"Read: {text}")
             return text
         else:
@@ -24,7 +28,8 @@ class Router:
             None
 
     def accept(self):
-        (socket, (_, address)) = self.listener.accept()
-        print(f"New connection from {address}")
+        (socket, _) = self.listener.accept()
+        address = socket.recv(MSG_MAX_LEN).decode("utf-8")
+        print("New connection from ", address)
         self.routing_table[address] = socket
         return (socket, address)

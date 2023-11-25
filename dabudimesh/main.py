@@ -1,18 +1,24 @@
 from router import Router
+from utils import (
+    create_bluetooth_server,
+    create_tcp_server,
+    create_bluetooth_connection,
+    create_tcp_connection,
+    socket_address,
+)
 import asyncio
 import sys
-import random
-import os
-import socket
-
+import bluetooth
+from config import IS_USING_BLUETOOTH
 
 EXIT_COMMAND = "\\exit"
 CONNECT_COMMAND = "\\connect"
 MESSAGE_COMMAND = "\\message"
+SCAN_COMMAND = "\\scan"
 
 
 def _on_command(sock, router):
-    command = sock.read()
+    command = sock.readline()
     command = command.strip()
     print(f"Processing command: {command}")
     if command.startswith(EXIT_COMMAND):
@@ -21,15 +27,28 @@ def _on_command(sock, router):
 
     elif command.startswith(CONNECT_COMMAND):
         print("Got connect command")
-        port = int(command.split(" ")[1])
-        sock = socket.create_connection(("localhost", port))
-        router.add_connection(port, sock)
+        addr = command.split(" ")[1]
+        sock = (
+            create_bluetooth_connection(addr)
+            if IS_USING_BLUETOOTH
+            else create_tcp_connection(addr)
+        )
+        router.add_connection(addr, sock)
         asyncio.get_event_loop().add_reader(sock, _on_read, sock, router)
 
     elif command.startswith(MESSAGE_COMMAND):
         print("Got message command")
         [_, address, text] = command.split(" ", maxsplit=2)
-        router.send(int(address), text)
+        router.send(address, text)
+
+    elif command.startswith(SCAN_COMMAND):
+        print("Got scan command")
+        devices = dict(bluetooth.discover_devices(lookup_names=True))
+        devices = {devices[k]: k for k in devices}
+
+        print(f"Found {len(devices)} devices")
+        for name in devices:
+            print(devices[name], name)
 
     else:
         print(f"Can't handle command {command}")
@@ -47,11 +66,10 @@ def _on_accept(router):
 
 
 def main():
-    random.seed(str(os.times()))
-    port = random.randint(1000, 5000)
-    print(f"port:{port}")
-    listener = socket.create_server(("localhost", port))
-    router = Router(port, listener)
+    listener = create_bluetooth_server() if IS_USING_BLUETOOTH else create_tcp_server()
+    address = socket_address(listener, IS_USING_BLUETOOTH)
+    router = Router(address, listener)
+    print("Our address is ", address)
 
     loop = asyncio.new_event_loop()
     loop.add_reader(listener, _on_accept, router)
