@@ -1,4 +1,4 @@
-from config import DEFAULT_BLUETOOTH_PORT
+from config import DEFAULT_BLUETOOTH_PORT, IS_USING_BLUETOOTH
 import pydbus
 import random
 import socket
@@ -31,6 +31,18 @@ def create_bluetooth_connection(addr):
     return s
 
 
-def socket_address(sock, is_bluetooth=False):
+def socket_address(sock):
     sock_addr = sock.getsockname()
-    return str(sock_addr[0] if is_bluetooth else sock_addr[1])
+    return str(sock_addr[0] if IS_USING_BLUETOOTH else sock_addr[1])
+
+
+def create_server():
+    return create_bluetooth_server() if IS_USING_BLUETOOTH else create_tcp_server()
+
+
+def create_connection(addr):
+    return (
+        create_bluetooth_connection(addr)
+        if IS_USING_BLUETOOTH
+        else create_tcp_connection(addr)
+    )
