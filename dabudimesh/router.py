@@ -19,7 +19,7 @@ class Router:
         socket = self.routing_table[message.get_destination()]
         socket.sendall(message.encode())
 
-    def send_message(self, destination, text):
+    def send_text(self, destination, text):
         message = Message("message", self.address, destination, {"text": text})
         print(message)
         self.send(message)
