@@ -29,20 +29,8 @@ class Router:
         self.send(message)
 
     def process_message_from(self, socket):
-        parameters = Message.decode(socket.recv(MSG_MAX_LEN).decode("utf-8"))
+        message = Message.decode(socket.recv(MSG_MAX_LEN))
 
-        optional = {}
-        additional_parameters = {"text", "address", "previous"}
-        for key in additional_parameters:
-            if key in parameters["params"]:
-                optional[key] = parameters["params"][key]
-
-        message = Message(
-            parameters["command"],
-            parameters["source"],
-            parameters["destination"],
-            optional,
-        )
         if message.get_destination() == self.address:
             if message.get_command() == "message":
                 return message.get_params()["text"]
@@ -55,14 +43,14 @@ class Router:
             None
 
     def read_message_from(socket):
-        message = Message.decode(socket.recv(MSG_MAX_LEN).decode("utf-8"))
+        message = Message.decode(socket.recv(MSG_MAX_LEN))
         return message
 
     def accept(self):
         (socket, _) = self.listener.accept()
-        address = Message.decode(socket.recv(MSG_MAX_LEN).decode("utf-8"))["params"][
-            "address"
-        ]
+        message = Message.decode(socket.recv(MSG_MAX_LEN))
+        assert message.get_command() == "connection"
+        address = message.get_params()["address"]
         print("New connection from ", address)
         self.routing_table[address] = socket
         return (socket, address)

@@ -20,8 +20,10 @@ class Message:
         return self.fields["params"]
 
     @staticmethod
-    def decode(line):
-        return json.loads(line)
+    def decode(raw_bytes):
+        dict = json.loads(raw_bytes.decode("utf-8"))
+        params = dict["params"] if "params" in dict else None
+        return Message(dict["command"], dict["source"], dict["destination"], params)
 
     def encode(self):
         return bytes(json.dumps(self.fields), "utf-8")
