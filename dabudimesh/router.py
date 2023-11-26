@@ -13,7 +13,7 @@ class Router:
     def add_connection(self, address, socket):
         # TODO: inform neighbors recursively
         self.routing_table[address] = socket
-        self.send_connection(address, self.address)
+        self.send_greeting(address, self.address)
 
     def send(self, message):
         socket = self.routing_table[message.get_destination()]
@@ -24,8 +24,8 @@ class Router:
         print(message)
         self.send(message)
 
-    def send_connection(self, destination, address):
-        message = Message("connection", self.address, destination, {"address": address})
+    def send_greeting(self, destination, address):
+        message = Message("greeting", self.address, destination, {"from": address})
         self.send(message)
 
     def process_message_from(self, socket):
@@ -34,8 +34,8 @@ class Router:
         if message.get_destination() == self.address:
             if message.get_command() == "message":
                 return message.get_params()["text"]
-            elif message.get_command == "connection":
-                return message.get_params()["address"]
+            elif message.get_command == "greeting":
+                return message.get_params()["from"]
             else:
                 return None
         else:
@@ -49,8 +49,8 @@ class Router:
     def accept(self):
         (socket, _) = self.listener.accept()
         message = Message.decode(socket.recv(MSG_MAX_LEN))
-        assert message.get_command() == "connection"
-        address = message.get_params()["address"]
+        assert message.get_command() == "greeting"
+        address = message.get_params()["from"]
         print("New connection from ", address)
         self.routing_table[address] = socket
         return (socket, address)
