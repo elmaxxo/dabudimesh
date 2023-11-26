@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "204b985c0c5d6128c8010bda3aa9a7c5b9091e7de1cc39665c3f40edbcad8aee"
+            "sha256": "0b84be9517a86bac19329f2ab5fb1b0f2cf2cf95312428cce35f1f2fc3107b25"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -48,7 +48,6 @@
                 "sha256:fc7f6a44d52747e65a02558e1d807c82df1d66ffa80a601862040a43ec2e3142"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.8'",
             "version": "==23.11.0"
         },
         "click": {
@@ -81,7 +80,6 @@
                 "sha256:e56c0e79fd18573007ccef50fa98689f73c4640c5a2117e7375af0ac43ac95d7"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.7'",
             "version": "==0.4.0"
         },
         "mypy-extensions": {
@@ -125,19 +123,9 @@
             "version": "==1.3.0"
         },
         "pybluez": {
-            "hashes": [
-                "sha256:22f5963e2ad6dfb7dddadb39ab29c3863bcd5335fbf324af948a2811c43f2455",
-                "sha256:319dab31a15d10e4797a618deed5bafc3b1c074b3a9b6270d780b3ea7ed472d5",
-                "sha256:46a0c4cb39fb84c235ae7442363562575d11d7cca61b77ef035d832d15824bdd",
-                "sha256:493d8a184433efbe7965420b6933bca37d3cacdcd168905c56d3459a8c4a5834",
-                "sha256:578a2651fb48484cecd3e67c089daa53950223b5c0ee29113ff8900e49422aec",
-                "sha256:7fe58ee9e53bc171d70907f5c5d3e47bc9ca4c0643dd7ca0f43ed388c916f3d4",
-                "sha256:87499a2ebbd3a3a7d2e1b3286a4cdf05a5c8a51eb2a0503c51f7698334f44412",
-                "sha256:92abf92965261093e88c9d39353f3fc4d2997f5c9bd8c19fc23b1beb91e40e17",
-                "sha256:c8f04d2e78951eaa9de486b4d49381704e8943d0a6e6e58f55fcd7b8582e90de"
-            ],
-            "index": "pypi",
-            "version": "==0.23"
+            "editable": true,
+            "git": "https://github.com/pybluez/pybluez.git",
+            "ref": "4d46ce14d9e888e3b0c65d5d3ba2a703f8e5e861"
         },
         "pydbus": {
             "hashes": [
@@ -153,7 +141,6 @@
                 "sha256:d989d136982de4e3b29dabcc838ad581c64e8ed52c11fbe86ddebd9da0818cd5"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.7'",
             "version": "==7.4.3"
         },
         "pytest-timeout": {
@@ -162,7 +149,6 @@
                 "sha256:bde531e096466f49398a59f2dde76fa78429a09a12411466f88a07213e220de2"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.7'",
             "version": "==2.2.0"
         },
         "python-json-logger": {
@@ -171,7 +157,6 @@
                 "sha256:f380b826a991ebbe3de4d897aeec42760035ac760345e57b812938dc8b35e2bd"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.6'",
             "version": "==2.0.7"
         },
         "tomli": {

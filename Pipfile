@@ -11,7 +11,7 @@ python-json-logger = "*"
 logging-json = "*"
 pytest-timeout = "*"
 pydbus = "*"
-pybluez = "*"
+pybluez = {editable = true, git = "https://github.com/pybluez/pybluez.git"}
 
 [dev-packages]
 
