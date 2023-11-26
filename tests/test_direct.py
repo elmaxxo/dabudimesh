@@ -12,10 +12,10 @@ def test_direct():
 
     (s2, p1_2) = r2.accept()
 
-    r1.send_message(p2, "Hello from R1!")
+    r1.send_text(p2, "Hello from R1!")
     received = r2.process_message_from(s2)
     assert received == "Hello from R1!"
 
-    r2.send_message(p1_2, "Hello from R2!")
+    r2.send_text(p1_2, "Hello from R2!")
     received = r1.process_message_from(s1)
     assert received == "Hello from R2!"

@@ -44,7 +44,7 @@ class DabudiShell(Cmd):
         if args is not None:
             addr = args[0]
             message = args[1]
-            self.router.send_message(addr, message)
+            self.router.send_text(addr, message)
 
     def do_scan(self, arg):
         "scan : Discover nearby bluetooth devices"
