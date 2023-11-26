@@ -11,7 +11,10 @@ python-json-logger = "*"
 logging-json = "*"
 pytest-timeout = "*"
 pydbus = "*"
-pybluez = "*"
+pybluez = {editable = true, git = "https://github.com/pybluez/pybluez.git"}
+flake8 = "*"
+vext = "*"
+pygobject = "*"
 
 [dev-packages]
 
