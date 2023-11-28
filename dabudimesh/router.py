@@ -25,7 +25,7 @@ class Router:
         self.send(message)
 
     def send_greeting(self, destination, address):
-        message = Message("greeting", self.address, destination, {"from": address})
+        message = Message("greeting", self.address, destination)
         self.send(message)
 
     def process_message_from(self, socket):
@@ -34,10 +34,6 @@ class Router:
         if message.get_destination() == self.address:
             if message.get_command() == "message":
                 return message.get_params()["text"]
-            elif message.get_command == "greeting":
-                return message.get_params()["from"]
-            else:
-                return None
         else:
             # TODO: redirect if self.address != message.address
             None
@@ -50,7 +46,7 @@ class Router:
         (socket, _) = self.listener.accept()
         message = Message.decode(socket.recv(MSG_MAX_LEN))
         assert message.get_command() == "greeting"
-        address = message.get_params()["from"]
+        address = message.get_source()
         print("New connection from ", address)
         self.routing_table[address] = socket
         return (socket, address)
