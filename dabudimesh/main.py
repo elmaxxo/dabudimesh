@@ -1,23 +1,19 @@
 from router import Router
-from utils import create_server, socket_address
-from shell import DabudiShell, _on_read
+from shell import DabudiShell
 import asyncio
-
-
-def _on_accept(router):
-    (sock, _) = router.accept()
-    asyncio.get_event_loop().add_reader(sock, _on_read, sock, router)
+from utils import create_server, socket_address
 
 
 def main():
+    # TODO: wrap router and listener in ConfigurableNone,
+    # shell shouldn't register callbacks and listen to socket
     listener = create_server()
     address = socket_address(listener)
-    router = Router(address, listener)
+    router = Router(address)
 
     loop = asyncio.new_event_loop()
-    shell = DabudiShell(router, loop)
+    shell = DabudiShell(router, loop, listener)
     loop.run_in_executor(None, shell.cmdloop)
-    loop.add_reader(listener, _on_accept, router)
     loop.run_forever()
 
 
