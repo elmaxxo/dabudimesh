@@ -9,7 +9,7 @@ def test_shell():
     serv2 = create_tcp_server(p2)
     r1, r2 = Router(p1), Router(p2)
 
-    shell = DabudiShell(r1, None)
+    shell = DabudiShell(r1, None, serv2)
 
     shell.onecmd("connect " + p2)
 

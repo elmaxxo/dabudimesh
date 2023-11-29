@@ -3,7 +3,6 @@ from utils import create_connection
 import bluetooth
 from cmd import Cmd
 from router import Router
-from utils import create_server
 from message import Message
 
 
@@ -39,14 +38,13 @@ class DabudiShell(Cmd):
     intro = "Welcome to the DabudiMesh shell. " + type_help + "\n"
     prompt = "(dabudi) "
 
-    def __init__(self, router: Router, event_loop):
+    def __init__(self, router: Router, event_loop, listener):
         super().__init__()
         self.router = router
         self.event_loop = event_loop
 
-        router_listener = create_server(router.address)
         if event_loop is not None:
-            event_loop.add_reader(router_listener, _on_accept, router_listener, router)
+            event_loop.add_reader(listener, _on_accept, listener, router)
 
     def do_exit(self, arg):
         "exit : Terminate this program"
