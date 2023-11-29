@@ -1,23 +1,16 @@
 from router import Router
-from utils import create_server, socket_address
-from shell import DabudiShell, _on_read
+from shell import DabudiShell
 import asyncio
-
-
-def _on_accept(router):
-    (sock, _) = router.accept()
-    asyncio.get_event_loop().add_reader(sock, _on_read, sock, router)
+import random
 
 
 def main():
-    listener = create_server()
-    address = socket_address(listener)
-    router = Router(address, listener)
+    address = str(random.randint(1500, 5000))
+    router = Router(address)
 
     loop = asyncio.new_event_loop()
     shell = DabudiShell(router, loop)
     loop.run_in_executor(None, shell.cmdloop)
-    loop.add_reader(listener, _on_accept, router)
     loop.run_forever()
 
 
