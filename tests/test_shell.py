@@ -1,31 +1,24 @@
 from dabudimesh.router import Router
 from shell import DabudiShell
-from dabudimesh.utils import create_tcp_server, socket_address
-from dabudimesh.message import Message
+from utils import create_tcp_server, socket_address
 
 
 def test_shell():
-    p1 = str(1599)
-    serv2 = create_tcp_server()
-    p2 = socket_address(serv2)
-    r1, r2 = Router(p1), Router(p2)
+    l1, l2 = create_tcp_server(), create_tcp_server()
+    p1, p2 = socket_address(l1), socket_address(l2)
+    r1, r2 = Router(p1, l1), Router(p2, l2)
 
-    shell = DabudiShell(r1, None, serv2)
+    shell = DabudiShell(r1, None)
 
     shell.onecmd("connect " + p2)
-
-    neighbor = serv2.accept()[0]
-    greeting = Message.decode(neighbor.recv(1337))
-    assert greeting.get_command() == "greeting"
-    r2.add_neighbor(greeting.get_source(), neighbor)
+    (s2, p1_2) = r2.accept()
 
     assert p2 in r1.routing_table
     assert p1 in r2.routing_table
 
-    text = "msg to R2"
-    shell.onecmd("message " + p2 + " " + text)
-    received = r2.route_pending()
-    assert received.get_command() == "text"
-    assert received.get_params()["text"] == text
+    sended = "msg to R2"
+    shell.onecmd("message " + p2 + " " + sended)
+    recieved = r2.process_message_from(s2)
+    assert recieved == sended
 
     assert shell.onecmd("exit")
