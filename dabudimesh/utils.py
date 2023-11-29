@@ -2,6 +2,7 @@ from config import DEFAULT_BLUETOOTH_PORT, IS_USING_BLUETOOTH
 import pydbus
 import random
 import socket
+import asyncio
 
 
 def getMAC():
@@ -41,8 +42,18 @@ def create_server():
 
 
 def create_connection(addr):
-    return (
-        create_bluetooth_connection(addr)
-        if IS_USING_BLUETOOTH
-        else create_tcp_connection(addr)
-    )
+    sock = None
+    try:
+        sock = (
+            create_bluetooth_connection(addr)
+            if IS_USING_BLUETOOTH
+            else create_tcp_connection(addr)
+        )
+    except Exception:
+        sock = None
+    return sock
+
+
+def run_event_loop(loop):
+    asyncio.set_event_loop(loop)
+    loop.run_forever()

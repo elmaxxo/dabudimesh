@@ -19,6 +19,9 @@ class Message:
     def get_params(self):
         return self.fields["params"]
 
+    def get_param(self, name):
+        return self.fields["params"][name]
+
     @staticmethod
     def decode(raw_bytes):
         dict = json.loads(raw_bytes.decode("utf-8"))

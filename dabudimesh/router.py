@@ -1,8 +1,6 @@
-# from email import message
 from message import Message
 from select import select
-
-MSG_MAX_LEN = 4096
+from config import MSG_MAX_LEN
 
 
 class Router:
@@ -11,12 +9,21 @@ class Router:
         self.neighbors = {}
         self.address = address
 
+    def available_addresses(self):
+        return self.routing_table.keys()
+
     def add_neighbor(self, address, socket):
         self.neighbors[address] = socket
         self.routing_table[address] = address
 
     def add_route(self, addr_from, addr_to):
-        self.routing_table[addr_from] = addr_to
+        if addr_from not in self.available_addresses():
+            self.routing_table[addr_from] = addr_to
+
+    def add_routes(self, addr_to, new_addresses):
+        for addr_from in new_addresses:
+            if addr_from != self.address:
+                self.add_route(addr_from, addr_to)
 
     def send(self, message):
         neighbor_addr = self.routing_table[message.get_destination()]
@@ -28,13 +35,12 @@ class Router:
         if len(ready_neighbors) == 0:
             return None
 
-        assert len(ready_neighbors) == 1
-        # TODO: handle len(ready_neighbors) >= 1
-        neighbor = ready_neighbors[0]
-        message = Message.decode(neighbor.recv(MSG_MAX_LEN))
-        destination = message.get_destination()
-        if destination == self.address:
-            return message
-        else:
-            self.send(message)
-            return None
+        for neighbor in ready_neighbors:
+            message = Message.decode(neighbor.recv(MSG_MAX_LEN))
+            destination = message.get_destination()
+
+            if destination == self.address:
+                return message
+            else:
+                self.send(message)
+        return None
