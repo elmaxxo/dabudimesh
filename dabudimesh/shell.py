@@ -7,14 +7,21 @@ from message import Message
 
 
 def _on_read(address, router: Router):
-    message = router.route_pending(address)
-    if message is None:
-        return
+    try:
+        message = router.route_pending()
+        if message is None:
+            return
 
-    if message.get_command() == "text":
-        print(message.get_params()["text"])
-    else:
-        print(f"Cant handle command: {message.get_command()}")
+        if message.get_command() == "text":
+            print(message.get_params()["text"])
+        else:
+            print(f"Can't handle command: {message.get_command()}")
+
+    except Exception:
+        print(f"Router {address} disconnected")
+        # TODO: Handle it properly.
+        asyncio.get_event_loop().stop()
+        exit()
 
 
 def _on_accept(server, router: Router):
