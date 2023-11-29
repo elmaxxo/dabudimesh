@@ -1,11 +1,12 @@
 from dabudimesh.router import Router
-from dabudimesh.utils import create_tcp_server, create_tcp_connection
+from dabudimesh.utils import create_tcp_server, create_tcp_connection, socket_address
 from dabudimesh.message import Message
 
 
 def test_direct():
-    p1, p2 = str(1500), str(3000)
-    serv2 = create_tcp_server(p2)
+    p1 = str(1500)
+    serv2 = create_tcp_server()
+    p2 = socket_address(serv2)
     r1, r2 = Router(p1), Router(p2)
 
     s1 = create_tcp_connection(p2)

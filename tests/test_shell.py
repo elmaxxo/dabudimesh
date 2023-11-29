@@ -1,12 +1,13 @@
 from dabudimesh.router import Router
 from shell import DabudiShell
-from utils import create_tcp_server
+from dabudimesh.utils import create_tcp_server, socket_address
 from dabudimesh.message import Message
 
 
 def test_shell():
-    p1, p2 = str(1599), str(3210)
-    serv2 = create_tcp_server(p2)
+    p1 = str(1599)
+    serv2 = create_tcp_server()
+    p2 = socket_address(serv2)
     r1, r2 = Router(p1), Router(p2)
 
     shell = DabudiShell(r1, None, serv2)
