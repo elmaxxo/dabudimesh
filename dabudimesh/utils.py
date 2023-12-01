@@ -42,15 +42,11 @@ def create_server():
 
 
 def create_connection(addr):
-    sock = None
-    try:
-        sock = (
-            create_bluetooth_connection(addr)
-            if IS_USING_BLUETOOTH
-            else create_tcp_connection(addr)
-        )
-    except Exception:
-        sock = None
+    sock = (
+        create_bluetooth_connection(addr)
+        if IS_USING_BLUETOOTH
+        else create_tcp_connection(addr)
+    )
     return sock
 
 

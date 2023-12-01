@@ -1,11 +1,11 @@
-from network import NetworkInterfaceController
+from mesh import MeshNetworkNode
 from shell import DabudiShell
 
 
 def main():
-    nic_output = []
-    nic = NetworkInterfaceController(nic_output)
-    shell = DabudiShell(nic, nic_output)
+    node_output = []
+    node = MeshNetworkNode(node_output)
+    shell = DabudiShell(node, node_output)
     shell.cmdloop()
 
 
