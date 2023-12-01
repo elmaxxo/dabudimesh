@@ -48,6 +48,7 @@
                 "sha256:fc7f6a44d52747e65a02558e1d807c82df1d66ffa80a601862040a43ec2e3142"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.8'",
             "version": "==23.11.0"
         },
         "click": {
@@ -72,6 +73,7 @@
                 "sha256:ffdfce58ea94c6580c77888a86506937f9a1a227dfcd15f245d694ae20a6b6e5"
             ],
             "index": "pypi",
+            "markers": "python_full_version >= '3.8.1'",
             "version": "==6.1.0"
         },
         "iniconfig": {
@@ -88,6 +90,7 @@
                 "sha256:e56c0e79fd18573007ccef50fa98689f73c4640c5a2117e7375af0ac43ac95d7"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.7'",
             "version": "==0.4.0"
         },
         "mccabe": {
@@ -193,6 +196,7 @@
                 "sha256:481437b05af0a66b7c366ea052710eb3aacbb979d22d30b797f7ec29347ab1e6"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.8' and python_version < '4'",
             "version": "==3.46.0"
         },
         "pytest": {
@@ -201,6 +205,7 @@
                 "sha256:d989d136982de4e3b29dabcc838ad581c64e8ed52c11fbe86ddebd9da0818cd5"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.7'",
             "version": "==7.4.3"
         },
         "pytest-timeout": {
@@ -209,6 +214,7 @@
                 "sha256:bde531e096466f49398a59f2dde76fa78429a09a12411466f88a07213e220de2"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.7'",
             "version": "==2.2.0"
         },
         "python-json-logger": {
@@ -217,6 +223,7 @@
                 "sha256:f380b826a991ebbe3de4d897aeec42760035ac760345e57b812938dc8b35e2bd"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.6'",
             "version": "==2.0.7"
         },
         "ruamel.yaml": {
