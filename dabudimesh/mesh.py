@@ -59,6 +59,14 @@ class MeshNetworkNode:
 
         return True
 
+    def send_public_key(self, addr):
+        fut = asyncio.run_coroutine_threadsafe(
+            self.nic.send_public_key(addr), self.event_loop
+        )
+        fut.result(MAX_TIME_WAIT)
+
+        return True
+
     def __on_read(self, address):
         try:
             output = self.nic.handle_message(address)

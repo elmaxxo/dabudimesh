@@ -2,6 +2,8 @@ from mesh import MeshNetworkNode
 import bluetooth
 from cmd import Cmd
 from threading import Thread
+from aescypher import AESCipher
+from time import sleep
 
 
 class DabudiShell(Cmd):
@@ -39,7 +41,20 @@ class DabudiShell(Cmd):
         if args is not None:
             destination = args[0]
             text = args[1]
+            if destination in self.node.nic.shared_keys:
+                cypher = AESCipher(self.node.nic.shared_keys[destination])
+                message_encrypted = cypher.encrypt(text).decode("utf-8")
+                print(f"Message encrypted: {message_encrypted}")
+                text = message_encrypted
+
             self.node.send_text(destination, text)
+
+    def do_secure(self, arg):
+        "secure [addr] : Security channel creating with address (addr)"
+        args = self.__process(arg, 1)
+        if args is not None:
+            destination = args[0]
+            self.node.send_public_key(destination)
 
     def do_scan(self, arg):
         "scan : Discover nearby bluetooth devices"
@@ -83,3 +98,4 @@ class DabudiShell(Cmd):
         while messages is not None:
             if len(messages):
                 print(messages.pop(0))
+            sleep(0.1)
