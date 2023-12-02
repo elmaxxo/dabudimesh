@@ -3,7 +3,7 @@ import bluetooth
 from cmd import Cmd
 from threading import Thread
 from cyphers.aescypher import AESCipher
-
+from cyphers.kyber  import  Kyber768
 
 class DabudiShell(Cmd):
     type_help = "Type help or ? to list commands."
@@ -48,12 +48,12 @@ class DabudiShell(Cmd):
             self.nic.send_text(destination, text)
 
     def do_secure(self, arg):
-        "Security channel creating"
-        public_key = self.nic.public_key 
+        "Security channel creating" 
         args = self.__process(arg, 1)
         if args is not None:
             destination = args[0]
-            self.nic.send_public_key(destination, public_key)
+            self.nic.public_key, self.nic.private_keys[destination] = Kyber768.keygen()
+            self.nic.send_public_key(destination, self.nic.public_key)
 
     def do_scan(self, arg):
         "scan : Discover nearby bluetooth devices"

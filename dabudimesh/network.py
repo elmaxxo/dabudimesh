@@ -5,8 +5,8 @@ from utils import run_event_loop
 from config import MSG_MAX_LEN
 import asyncio
 from threading import Thread
-from cyphers.kyber  import  Kyber768
 from cyphers.aescypher import AESCipher
+from cyphers.kyber  import  Kyber768
 
 # TODO: replace output list with logger
 class NetworkInterfaceController:
@@ -35,10 +35,6 @@ class NetworkInterfaceController:
         greeting = Message("greeting", self.router.address, addr)
         sock.sendall(greeting.encode())
 
-        public_key, private_key = Kyber768.keygen()
-        self.private_keys[addr] = private_key
-        self.public_key = public_key
-        
         message = Message.decode(sock.recv(MSG_MAX_LEN))
         assert message.get_command() == "routes"
         addr_to = message.get_source()
@@ -93,7 +89,7 @@ class NetworkInterfaceController:
                 text = message.get_param("text")
                 if message.get_source() in self.shared_keys:
                     cypher = AESCipher(self.shared_keys[message.get_source()])
-                    print(self.shared_keys[message.get_source()])
+                    self.output.append(f"Encrypted message {text}")
                     message_decoded=cypher.decrypt(text).decode("utf-8")
                     self.output.append(f"Decrypted message from {message.get_source()}: {message_decoded}")
                 else:
