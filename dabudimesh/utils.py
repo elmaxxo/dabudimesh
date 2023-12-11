@@ -1,8 +1,16 @@
-from config import DEFAULT_BLUETOOTH_PORT, IS_USING_BLUETOOTH
+from config import DEFAULT_BLUETOOTH_PORT
 import pydbus
 import random
 import socket
 import asyncio
+from sys import argv
+
+
+def isUsingBluetooth():
+    return "bluetooth" in argv
+
+
+IS_USING_BLUETOOTH = isUsingBluetooth()
 
 
 def getMAC():
@@ -42,16 +50,11 @@ def create_server():
 
 
 def create_connection(addr):
-    sock = None
-    try:
-        sock = (
-            create_bluetooth_connection(addr)
-            if IS_USING_BLUETOOTH
-            else create_tcp_connection(addr)
-        )
-    except Exception:
-        sock = None
-    return sock
+    return (
+        create_bluetooth_connection(addr)
+        if IS_USING_BLUETOOTH
+        else create_tcp_connection(addr)
+    )
 
 
 def run_event_loop(loop):

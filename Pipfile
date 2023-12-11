@@ -12,9 +12,11 @@ logging-json = "*"
 pytest-timeout = "*"
 pydbus = "*"
 pybluez = {editable = true, git = "https://github.com/pybluez/pybluez.git"}
+kyber = {editable = true, git = "https://github.com/hellopuza/kyber.git"}
 flake8 = "*"
 vext = "*"
 pygobject = "*"
+pycryptodome = "*"
 
 [dev-packages]
 

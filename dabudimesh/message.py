@@ -1,4 +1,5 @@
 import json
+from config import MSG_MAX_LEN, MAX_TIME_WAIT
 
 
 class Message:
@@ -30,3 +31,17 @@ class Message:
 
     def encode(self):
         return bytes(json.dumps(self.fields), "utf-8")
+
+
+def read_message(sock):
+    # hidden sideeffect, hehe
+    sock.settimeout(MAX_TIME_WAIT)
+    msg_buf = bytearray()
+    while True:
+        try:
+            msg_buf += sock.recv(MSG_MAX_LEN)
+            message = Message.decode(msg_buf)
+            return message
+        except json.JSONDecodeError:
+            # continue reading
+            pass

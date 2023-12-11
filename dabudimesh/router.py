@@ -1,6 +1,5 @@
-from message import Message
+from message import read_message
 from select import select
-from config import MSG_MAX_LEN
 
 
 class Router:
@@ -36,11 +35,13 @@ class Router:
             return None
 
         for neighbor in ready_neighbors:
-            message = Message.decode(neighbor.recv(MSG_MAX_LEN))
+            message = read_message(neighbor)
             destination = message.get_destination()
 
+            print(f"Recieved message: {message.fields}")
             if destination == self.address:
                 return message
             else:
+                print(f"Forward message: {message.fields}")
                 self.send(message)
         return None
